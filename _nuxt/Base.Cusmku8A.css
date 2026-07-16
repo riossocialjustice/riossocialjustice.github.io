@@ -1,0 +1,1 @@
+.btn{--duration:.75s;--ease:cubic-bezier(.19,1,.22,1)}.btn__mask{clip-path:inset(100% 0 0 0);transition:clip-path var(--duration) var(--ease)}@media(hover:hover)and (pointer:fine){.btn:hover .btn__mask{clip-path:inset(0 0 0 0)}}

@@ -1,0 +1,1 @@
+import{ar as e}from"#entry";const i=e("main",{state:()=>({flags:{loaded:!1,menu:!1,fixed:!1,light:!1},global:{},site:{},work:[]}),actions:{setFlag(s,t){s in this.flags&&(this.flags[s]=t)},setSite(s){this.site=s},setGlobal(s){this.global=s},setWork(s){this.work=s}}});export{i as u};

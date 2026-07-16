@@ -1,0 +1,6 @@
+# TEMPORARY — staging only.
+# This copy runs at riossocialjustice.github.io while the site is rebuilt.
+# It must not be indexed: it would duplicate riossocialjustice.org and split ranking.
+# DELETE THIS FILE when the custom domain is cut over to production.
+User-agent: *
+Disallow: /
