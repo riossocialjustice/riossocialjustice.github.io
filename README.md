@@ -46,14 +46,30 @@ assets/datocms/         Images (18), previously served from DatoCMS
 robots.txt              Temporary. See below.
 ```
 
-## Two files that look deletable and are not
+## A file that looks deletable and is not
 
 - **`.nojekyll`** — GitHub Pages runs Jekyll by default, and Jekyll ignores any folder
   starting with an underscore. Without this empty file, `_nuxt/` is never published and the
   entire site loads without styles or scripts. Do not remove it.
-- **`robots.txt`** — currently blocks all indexing **on purpose**, because this staging copy
-  would otherwise compete with riossocialjustice.org in search results and split the site's
-  ranking. It must be removed or replaced when the domain is cut over.
+
+## The contact form
+
+The form does **not** post to a server. It opens the visitor's own mail client with the
+fields prefilled, addressed to info@riossocialjustice.org.
+
+This is deliberate and temporary. The form was built for Netlify Forms, which intercepted the
+POST at the host. On GitHub Pages nothing intercepts it, and the original code would have been
+actively harmful: `fetch` does not reject on an HTTP error status, so the POST would have
+"succeeded", the success message would have shown, and the message would have gone nowhere.
+Visitors would have been told they had been heard when they had not.
+
+The handler lives in `_nuxt/zch8Q--v.js` (shared by the EN and ES contact pages). Validation
+still runs. On submit it builds a `mailto:` and does not clear the form, so if the mail client
+fails to open the visitor keeps what they typed.
+
+A real form needs a backend. Worth noting when that gets built: this site can receive sensitive
+messages, so routing them through a free third-party form relay is not appropriate. Either use
+a processor with a data processing agreement, or an endpoint Ríos controls.
 
 ## Fonts
 
@@ -69,9 +85,19 @@ those families are used.
 
 ## Going live
 
-The domain currently points at the previous host. Cutting over means changing DNS at the
-registrar (Arsys / NICLINE) to point at GitHub Pages, then setting the custom domain in this
-repository's Pages settings. When that happens, delete `robots.txt` so the site can be indexed.
+This repository is configured and waiting on one external change: DNS.
+
+The custom domain is already set in this repository's Pages settings, so GitHub answers to
+riossocialjustice.org as soon as the domain resolves here. Until then the domain still points
+at the previous host (Netlify) and the old site keeps serving, so there is no outage.
+
+The remaining step is at the registrar (Arsys / NICLINE, managed by Two Rockets): point the
+apex at GitHub's four A records and the `www` CNAME at `riossocialjustice.github.io`. The MX,
+SPF, DKIM, and verification TXT records must be left untouched, because the domain also carries
+Ríos's Google Workspace email.
+
+Once DNS resolves here, GitHub issues a Let's Encrypt certificate automatically, usually within
+minutes. Enable "Enforce HTTPS" in Pages settings after it appears.
 
 ## Local preview
 
@@ -91,7 +117,9 @@ These are reproduced faithfully from the site as it existed and are worth fixing
 - `work/research-education-events/null/` exists as a page, from a content entry that was
   saved without a URL slug.
 - The favicon reference is empty and returns a 404.
-- The contact form previously posted to the old host's form handler and does not submit here.
+- `/team/` returns 404. Only the individual fellow pages exist; there is no index. This was
+  true on the previous site too.
+- No DMARC record on the domain.
 
 ---
 
