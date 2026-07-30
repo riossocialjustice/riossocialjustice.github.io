@@ -74,6 +74,12 @@
     "es": "Manifestantes con túnicas rojas y cofias blancas marchan frente al Palacio Legislativo en Montevideo"
   }
 };
+  var colors = {
+  "#0086a4": "#00819E",
+  "#b2a351": "#83773A",
+  "#f37030": "#CE4C0C"
+};
+  var colorRe = /#(?:f37030|b2a351|0086a4)\b/gi;
 
   function lang() {
     var p = window.location.pathname;
@@ -86,25 +92,40 @@
     return path.slice(path.lastIndexOf("/") + 1);
   }
 
-  function apply(img) {
+  function fixAlt(img) {
     // Never touch an existing alt (including alt=""): only fill true gaps.
     if (img.hasAttribute("alt")) return;
     var entry = alts[fileKey(img.getAttribute("src"))];
     if (entry) img.setAttribute("alt", entry[lang()]);
   }
 
+  function fixStyle(el) {
+    var s = el.getAttribute("style");
+    // Cheap early exit: GSAP rewrites transform styles every animation
+    // frame, and none of those contain a hex color.
+    if (!s || s.indexOf("#") === -1) return;
+    var t = s.replace(colorRe, function (m) {
+      return colors[m.toLowerCase()];
+    });
+    if (t !== s) el.setAttribute("style", t);
+  }
+
   function sweep(root) {
-    if (root.tagName === "IMG") apply(root);
+    if (root.tagName === "IMG") fixAlt(root);
+    if (root.getAttribute) fixStyle(root);
     if (!root.querySelectorAll) return;
     var imgs = root.querySelectorAll("img:not([alt])");
-    for (var i = 0; i < imgs.length; i++) apply(imgs[i]);
+    for (var i = 0; i < imgs.length; i++) fixAlt(imgs[i]);
+    var styled = root.querySelectorAll("[style]");
+    for (var j = 0; j < styled.length; j++) fixStyle(styled[j]);
   }
 
   new MutationObserver(function (muts) {
     for (var i = 0; i < muts.length; i++) {
       var m = muts[i];
       if (m.type === "attributes") {
-        apply(m.target);
+        if (m.attributeName === "src") fixAlt(m.target);
+        else fixStyle(m.target);
       } else {
         for (var j = 0; j < m.addedNodes.length; j++) {
           if (m.addedNodes[j].nodeType === 1) sweep(m.addedNodes[j]);
@@ -115,7 +136,7 @@
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ["src"]
+    attributeFilter: ["src", "style"]
   });
 
   if (document.readyState === "loading") {
