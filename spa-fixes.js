@@ -80,6 +80,18 @@
   "#f37030": "#CE4C0C"
 };
   var colorRe = /#(?:f37030|b2a351|0086a4)\b/gi;
+  // Content Ríos changed after launch that the live DatoCMS still serves the
+  // old way (content-overrides.json; added 2026-11-12). Keyed by the old
+  // <h3> text of an Advisory Board member.
+  var members = {
+  "GIANELLA SEVERINI": {
+    "name": "JULIANA NANTABA",
+    "text": {
+      "en": "Afya na Haki <br><em>Head, Impact and Strategy</em>",
+      "es": "Afya na Haki <br><em>Responsable de Impacto y Estrategia</em>"
+    }
+  }
+};
 
   function lang() {
     var p = window.location.pathname;
@@ -110,7 +122,20 @@
     if (t !== s) el.setAttribute("style", t);
   }
 
+  function fixMember(h3) {
+    // Edit the existing text node rather than replacing it, so Vue keeps a
+    // live reference if it re-renders (e.g. on a language switch).
+    var t = h3.firstChild;
+    if (!t || t.nodeType !== 3 || h3.childNodes.length !== 1) return;
+    var entry = members[t.nodeValue.trim()];
+    if (!entry) return;
+    t.nodeValue = entry.name;
+    var p = h3.nextElementSibling;
+    if (p && p.tagName === "P") p.innerHTML = entry.text[lang()];
+  }
+
   function sweep(root) {
+    if (root.tagName === "H3") fixMember(root);
     if (root.tagName === "IMG") fixAlt(root);
     if (root.getAttribute) fixStyle(root);
     if (!root.querySelectorAll) return;
@@ -118,12 +143,17 @@
     for (var i = 0; i < imgs.length; i++) fixAlt(imgs[i]);
     var styled = root.querySelectorAll("[style]");
     for (var j = 0; j < styled.length; j++) fixStyle(styled[j]);
+    var heads = root.querySelectorAll("h3");
+    for (var k = 0; k < heads.length; k++) fixMember(heads[k]);
   }
 
   new MutationObserver(function (muts) {
     for (var i = 0; i < muts.length; i++) {
       var m = muts[i];
-      if (m.type === "attributes") {
+      if (m.type === "characterData") {
+        var par = m.target.parentNode;
+        if (par && par.tagName === "H3") fixMember(par);
+      } else if (m.type === "attributes") {
         if (m.attributeName === "src") fixAlt(m.target);
         else fixStyle(m.target);
       } else {
@@ -136,6 +166,7 @@
     childList: true,
     subtree: true,
     attributes: true,
+    characterData: true,
     attributeFilter: ["src", "style"]
   });
 
