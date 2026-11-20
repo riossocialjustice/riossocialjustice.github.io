@@ -92,6 +92,66 @@
     }
   }
 };
+  // Old addresses that moved (content-overrides.json "linkRedirects"; added
+  // 2026-11-20 for the misspelled /work/regional-initatives slug and the empty
+  // "null" event page). The live CMS can still emit them during SPA navigation;
+  // links are rewritten, and a click on one loads the new address directly.
+  var redirects = {
+  "/es/work/regional-initatives": "/es/work/regional-initiatives/",
+  "/es/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean": "/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/",
+  "/es/work/research-education-events/null": "/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/",
+  "/work/regional-initatives": "/work/regional-initiatives/",
+  "/work/research-education-events/null": "/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/"
+};
+  // Misspellings the live CMS still serves (content-overrides.json
+  // "textFixes"; added 2026-11-20). Whole-word replacements in text nodes.
+  var textFixes = {
+  "REGIONAL INITATIVES": "REGIONAL INITIATIVES",
+  "Regional Initatives": "Regional Initiatives"
+};
+
+  function fixText(node) {
+    var v = node.nodeValue;
+    if (!v) return;
+    var t = v;
+    for (var k in textFixes) {
+      if (t.indexOf(k) !== -1) t = t.split(k).join(textFixes[k]);
+    }
+    if (t !== v) node.nodeValue = t;
+  }
+
+  function fixTexts(root) {
+    if (root.nodeType === 3) { fixText(root); return; }
+    if (!root.ownerDocument && root !== document) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    var n;
+    while ((n = w.nextNode())) fixText(n);
+  }
+
+  function moved(href) {
+    if (!href) return null;
+    var path = href.replace(/^https?:\/\/[^\/]+/, "").split(/[?#]/)[0].replace(/\/$/, "");
+    return redirects[path] || null;
+  }
+
+  function fixLink(a) {
+    var to = moved(a.getAttribute("href"));
+    if (!to) return;
+    // Remember the target: the router still holds the old route for this
+    // link, so the click handler must recognise it after the rewrite.
+    a.setAttribute("data-moved-to", to);
+    if (a.getAttribute("href") !== to) a.setAttribute("href", to);
+  }
+
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var to = a.getAttribute("data-moved-to") || moved(a.getAttribute("href"));
+    if (!to) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.location.assign(to);
+  }, true);
 
   function lang() {
     var p = window.location.pathname;
@@ -145,16 +205,22 @@
     for (var j = 0; j < styled.length; j++) fixStyle(styled[j]);
     var heads = root.querySelectorAll("h3");
     for (var k = 0; k < heads.length; k++) fixMember(heads[k]);
+    fixTexts(root);
+    if (root.tagName === "A") fixLink(root);
+    var links = root.querySelectorAll("a[href]");
+    for (var l = 0; l < links.length; l++) fixLink(links[l]);
   }
 
   new MutationObserver(function (muts) {
     for (var i = 0; i < muts.length; i++) {
       var m = muts[i];
       if (m.type === "characterData") {
+        fixText(m.target);
         var par = m.target.parentNode;
         if (par && par.tagName === "H3") fixMember(par);
       } else if (m.type === "attributes") {
         if (m.attributeName === "src") fixAlt(m.target);
+        else if (m.attributeName === "href") fixLink(m.target);
         else fixStyle(m.target);
       } else {
         for (var j = 0; j < m.addedNodes.length; j++) {
@@ -167,7 +233,7 @@
     subtree: true,
     attributes: true,
     characterData: true,
-    attributeFilter: ["src", "style"]
+    attributeFilter: ["src", "style", "href"]
   });
 
   if (document.readyState === "loading") {

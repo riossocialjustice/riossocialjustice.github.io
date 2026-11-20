@@ -139,22 +139,16 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://riossocialjustice.org/work/litigation-representation/interventions-before-international-bodies/"/>
   </url>
   <url>
-    <loc>https://riossocialjustice.org/es/work/regional-initatives/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://riossocialjustice.org/work/regional-initatives/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://riossocialjustice.org/es/work/regional-initatives/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://riossocialjustice.org/work/regional-initatives/"/>
+    <loc>https://riossocialjustice.org/es/work/regional-initiatives/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://riossocialjustice.org/work/regional-initiatives/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://riossocialjustice.org/es/work/regional-initiatives/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://riossocialjustice.org/work/regional-initiatives/"/>
   </url>
   <url>
     <loc>https://riossocialjustice.org/es/work/research-education-events/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://riossocialjustice.org/work/research-education-events/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://riossocialjustice.org/es/work/research-education-events/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://riossocialjustice.org/work/research-education-events/"/>
-  </url>
-  <url>
-    <loc>https://riossocialjustice.org/es/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://riossocialjustice.org/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://riossocialjustice.org/es/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://riossocialjustice.org/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/"/>
   </url>
   <url>
     <loc>https://riossocialjustice.org/es/work/sexual-reproductive-health/</loc>
@@ -253,10 +247,10 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://riossocialjustice.org/work/litigation-representation/interventions-before-international-bodies/"/>
   </url>
   <url>
-    <loc>https://riossocialjustice.org/work/regional-initatives/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://riossocialjustice.org/work/regional-initatives/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://riossocialjustice.org/es/work/regional-initatives/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://riossocialjustice.org/work/regional-initatives/"/>
+    <loc>https://riossocialjustice.org/work/regional-initiatives/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://riossocialjustice.org/work/regional-initiatives/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://riossocialjustice.org/es/work/regional-initiatives/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://riossocialjustice.org/work/regional-initiatives/"/>
   </url>
   <url>
     <loc>https://riossocialjustice.org/work/research-education-events/</loc>
@@ -266,9 +260,6 @@
   </url>
   <url>
     <loc>https://riossocialjustice.org/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://riossocialjustice.org/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://riossocialjustice.org/es/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://riossocialjustice.org/work/research-education-events/judicial-dialogues-on-health-and-the-law-in-latin-america-and-the-caribbean/"/>
   </url>
   <url>
     <loc>https://riossocialjustice.org/work/sexual-reproductive-health/</loc>
